@@ -39,6 +39,67 @@ public class ModEntry : Mod
         new Harmony(this.ModManifest.UniqueID).PatchAll();
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.AssetsInvalidated += this.OnAssetsInvalidated;
+        helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+    }
+
+    /// <summary>Add the settings to Generic Mod Config Menu, if it's installed.</summary>
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        var menu = this.Helper.ModRegistry.GetApi<IGenericModConfigMenuApi>("spacechase0.GenericModConfigMenu");
+        if (menu == null)
+            return;
+
+        menu.Register(
+            mod: this.ModManifest,
+            reset: () =>
+            {
+                this.Config = new ModConfig();
+                SproutPatch.Config = this.Config;
+            },
+            save: () =>
+            {
+                this.Config.LawnSproutChance = Math.Clamp(this.Config.LawnSproutChance, 0f, 1f);
+                this.Helper.WriteConfig(this.Config);
+                this.RepaintLawn();
+            }
+        );
+
+        menu.AddSectionTitle(this.ModManifest, () => "Lawn colour");
+        menu.AddBoolOption(
+            mod: this.ModManifest,
+            getValue: () => this.Config.Enabled,
+            setValue: value => this.Config.Enabled = value,
+            name: () => "Repaint the lawn",
+            tooltip: () => "Paint Lawn Grass with the grass tile from your recolour pack (or vanilla). Off leaves the lawn as Lawn Grass draws it."
+        );
+        menu.AddNumberOption(
+            mod: this.ModManifest,
+            getValue: () => this.Config.TileIndex,
+            setValue: value => this.Config.TileIndex = value,
+            name: () => "Tile index",
+            tooltip: () => "Which tile of the outdoor tilesheet the lawn is painted with. 175 is the plain farm grass; 351 is the darker mown patch by the farmhouse.",
+            min: 0
+        );
+
+        menu.AddSectionTitle(this.ModManifest, () => "Mown lawn");
+        menu.AddNumberOption(
+            mod: this.ModManifest,
+            getValue: () => this.Config.LawnSproutChance,
+            setValue: value => this.Config.LawnSproutChance = value,
+            name: () => "Sprout chance per day",
+            tooltip: () => "The daily chance that a mown lawn tile starts growing again. Once it sprouts it grows at the usual rate. 100% turns this off.",
+            min: 0f,
+            max: 1f,
+            interval: 0.01f,
+            formatValue: value => $"{value:P0}"
+        );
+    }
+
+    /// <summary>Reload the lawn sprites so a changed colour setting shows up without restarting.</summary>
+    private void RepaintLawn()
+    {
+        foreach (string season in Seasons)
+            this.Helper.GameContent.InvalidateCache(AssetPrefix + season);
     }
 
     private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
@@ -72,8 +133,7 @@ public class ModEntry : Mod
         if (!sheetChanged)
             return;
 
-        foreach (string season in Seasons)
-            this.Helper.GameContent.InvalidateCache(AssetPrefix + season);
+        this.RepaintLawn();
     }
 
     /// <summary>Fill the mod's lawn sprite (which supplies the shape) with the map's grass tile (which supplies the pixels).</summary>

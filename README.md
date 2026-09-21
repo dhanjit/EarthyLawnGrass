@@ -26,7 +26,10 @@ rest of your grass isn't slowed down.
 
 ## Configuration
 
-`config.json` is created on first run.
+`config.json` is created on first run. If you have
+[Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed (optional),
+you can change every setting in-game instead: title screen cog, or "Mod Options" in the game menu.
+Colour changes apply immediately, with no restart.
 
 | Setting | Default | What it does |
 |---|---|---|
