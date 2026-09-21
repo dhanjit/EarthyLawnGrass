@@ -1,5 +1,7 @@
 # Earthy Lawn Grass
 
+[Nexus Mods](https://www.nexusmods.com/stardewvalley/mods/52657)
+
 Makes [Lawn Grass](https://www.nexusmods.com/stardewvalley/mods/47165) match your recolour pack.
 
 Lawn Grass ships its own bright green lawn sprites. Recolour packs don't touch them, because those
@@ -62,8 +64,8 @@ finds the game folder automatically and writes a release zip to `dist/`. The pro
 
 ## Updates
 
-SMAPI checks for new versions through the `GitHub:dhanjit/EarthyLawnGrass` update key, which matches
-against this repo's release tags. To release: bump `Version` in `manifest.json` and the `.csproj`,
+SMAPI checks for new versions through the `Nexus:52657` and `GitHub:dhanjit/EarthyLawnGrass` update keys
+([Nexus page](https://www.nexusmods.com/stardewvalley/mods/52657); GitHub matches against this repo's release tags). To release: bump `Version` in `manifest.json` and the `.csproj`,
 build, then create a GitHub release tagged with the version and attach the zip from `dist/`.
 
 ## License
