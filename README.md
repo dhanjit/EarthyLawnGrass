@@ -53,9 +53,10 @@ the lawn untouched rather than breaking it.
 
 ### Keeping a mown lawn mown
 
-A Harmony patch on `Grass.dayUpdate` runs after Lawn Grass's own patch. If a tile started the day at
-height 0 (bare lawn) and grew overnight, it keeps that growth only with probability
-`LawnSproutChance`; otherwise it goes back to 0. Tiles at any other height are left alone. Only a lawn
+The game grows grass twice each night: `Grass.dayUpdate` on every tile, then the spreading pass
+`GameLocation.growWeedGrass`, which also grows existing grass. A tile that starts the night at height 0
+(bare lawn) gets one roll against `LawnSproutChance` in the first; if it fails, it's held at 0 through
+both. Tiles at any other height are left alone. Only a lawn
 tile can sit at height 0 (the game removes ordinary grass that reaches it), so nothing else is
 affected. Lawn Grass's `GrowChance` slows every growth stage alike, which is why this is separate.
 

@@ -40,6 +40,8 @@ public class ModEntry : Mod
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.AssetsInvalidated += this.OnAssetsInvalidated;
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+        helper.Events.GameLoop.DayStarted += (_, _) => SproutPatch.HeldTonight.Clear();
+        helper.Events.GameLoop.ReturnedToTitle += (_, _) => SproutPatch.HeldTonight.Clear();
     }
 
     /// <summary>Add the settings to Generic Mod Config Menu, if it's installed.</summary>
