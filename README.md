@@ -35,7 +35,7 @@ Colour changes apply immediately, with no restart.
 |---|---|---|
 | `Enabled` | `true` | Set to `false` to leave the lawn as Lawn Grass draws it. |
 | `TileIndex` | `175` | Which tile of `Maps/<season>_outdoorsTileSheet` the lawn is painted with. `175` is the plain grass used across the farm map. `351` is the darker mown patch the map draws around the farmhouse. |
-| `LawnSproutChance` | `0.01` | The daily chance that a mown lawn tile (height 0) starts growing again. Once it sprouts it grows at the usual rate, so a mown lawn stays mown without slowing the rest of your grass. `1` turns this off. For the usual rate after sprouting, leave Lawn Grass's own `GrowChance` at `1`. |
+| `LawnSproutChance` | `0.01` | The daily chance (0 to 1, any decimal, e.g. `0.001` = 0.1%) that a mown lawn tile (height 0) starts growing again. Once it sprouts it grows at the usual rate, so a mown lawn stays mown without slowing the rest of your grass. `1` turns this off. For the usual rate after sprouting, leave Lawn Grass's own `GrowChance` at `1`. |
 
 ## How it works
 
