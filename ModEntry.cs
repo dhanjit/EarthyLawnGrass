@@ -40,6 +40,8 @@ public class ModEntry : Mod
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.AssetsInvalidated += this.OnAssetsInvalidated;
         helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+        helper.Events.GameLoop.DayStarted += (_, _) => SproutPatch.HeldTonight.Clear();
+        helper.Events.GameLoop.ReturnedToTitle += (_, _) => SproutPatch.HeldTonight.Clear();
     }
 
     /// <summary>Add the settings to Generic Mod Config Menu, if it's installed.</summary>
@@ -86,12 +88,8 @@ public class ModEntry : Mod
             mod: this.ModManifest,
             getValue: () => this.Config.LawnSproutChance,
             setValue: value => this.Config.LawnSproutChance = value,
-            name: () => "Sprout chance per day",
-            tooltip: () => "The daily chance that a mown lawn tile starts growing again. Once it sprouts it grows at the usual rate. 100% turns this off.",
-            min: 0f,
-            max: 1f,
-            interval: 0.01f,
-            formatValue: value => $"{value:P0}"
+            name: () => "Sprout chance per day (0-1)",
+            tooltip: () => "The daily chance (0 to 1) that a mown lawn tile starts growing again. 0.01 = 1%, 0.001 = 0.1%, 0 = never. Once it sprouts it grows at the usual rate. 1 turns this off."
         );
     }
 

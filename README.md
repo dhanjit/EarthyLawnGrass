@@ -35,7 +35,7 @@ Colour changes apply immediately, with no restart.
 |---|---|---|
 | `Enabled` | `true` | Set to `false` to leave the lawn as Lawn Grass draws it. |
 | `TileIndex` | `175` | Which tile of `Maps/<season>_outdoorsTileSheet` the lawn is painted with. `175` is the plain grass used across the farm map. `351` is the darker mown patch the map draws around the farmhouse. |
-| `LawnSproutChance` | `0.01` | The daily chance that a mown lawn tile (height 0) starts growing again. Once it sprouts it grows at the usual rate, so a mown lawn stays mown without slowing the rest of your grass. `1` turns this off. For the usual rate after sprouting, leave Lawn Grass's own `GrowChance` at `1`. |
+| `LawnSproutChance` | `0.01` | The daily chance (0 to 1, any decimal, e.g. `0.001` = 0.1%) that a mown lawn tile (height 0) starts growing again. Once it sprouts it grows at the usual rate, so a mown lawn stays mown without slowing the rest of your grass. `1` turns this off. For the usual rate after sprouting, leave Lawn Grass's own `GrowChance` at `1`. |
 
 ## How it works
 
@@ -53,9 +53,10 @@ the lawn untouched rather than breaking it.
 
 ### Keeping a mown lawn mown
 
-A Harmony patch on `Grass.dayUpdate` runs after Lawn Grass's own patch. If a tile started the day at
-height 0 (bare lawn) and grew overnight, it keeps that growth only with probability
-`LawnSproutChance`; otherwise it goes back to 0. Tiles at any other height are left alone. Only a lawn
+The game grows grass twice each night: `Grass.dayUpdate` on every tile, then the spreading pass
+`GameLocation.growWeedGrass`, which also grows existing grass. A tile that starts the night at height 0
+(bare lawn) gets one roll against `LawnSproutChance` in the first; if it fails, it's held at 0 through
+both. Tiles at any other height are left alone. Only a lawn
 tile can sit at height 0 (the game removes ordinary grass that reaches it), so nothing else is
 affected. Lawn Grass's `GrowChance` slows every growth stage alike, which is why this is separate.
 
