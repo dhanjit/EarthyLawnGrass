@@ -3,8 +3,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <Version>1.0.0</Version>
-    <EnableHarmony>false</EnableHarmony>
+    <Version>1.1.0</Version>
+    <EnableHarmony>true</EnableHarmony>
     <!-- build a zip we can install through Vortex instead of copying into the game's Mods folder -->
     <EnableModDeploy>false</EnableModDeploy>
     <EnableModZip>true</EnableModZip>

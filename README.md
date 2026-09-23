@@ -13,6 +13,10 @@ outdoor tilesheet is actually loaded — your recolour's, or vanilla's if you do
 from the tilesheet already loaded in your game, so the lawn matches whatever you install, including
 future updates to that pack.
 
+It can also **keep a mown lawn mown**: a lawn tile cut down to bare ground only starts growing back
+with a small daily chance (`LawnSproutChance`). Once it sprouts, it grows at the normal rate, so the
+rest of your grass isn't slowed down.
+
 ## Install
 
 1. Install [SMAPI](https://smapi.io) 4.0.0 or later.
@@ -28,6 +32,7 @@ future updates to that pack.
 |---|---|---|
 | `Enabled` | `true` | Set to `false` to leave the lawn as Lawn Grass draws it. |
 | `TileIndex` | `175` | Which tile of `Maps/<season>_outdoorsTileSheet` the lawn is painted with. `175` is the plain grass used across the farm map. `351` is the darker mown patch the map draws around the farmhouse. |
+| `LawnSproutChance` | `0.01` | The daily chance that a mown lawn tile (height 0) starts growing again. Once it sprouts it grows at the usual rate, so a mown lawn stays mown without slowing the rest of your grass. `1` turns this off. For the usual rate after sprouting, leave Lawn Grass's own `GrowChance` at `1`. |
 
 ## How it works
 
@@ -43,10 +48,20 @@ It also listens for tilesheet invalidation, so the lawn refreshes when a recolou
 If the tilesheet can't be loaded, or `TileIndex` falls outside it, the mod logs a warning and leaves
 the lawn untouched rather than breaking it.
 
+### Keeping a mown lawn mown
+
+A Harmony patch on `Grass.dayUpdate` runs after Lawn Grass's own patch. If a tile started the day at
+height 0 (bare lawn) and grew overnight, it keeps that growth only with probability
+`LawnSproutChance`; otherwise it goes back to 0. Tiles at any other height are left alone. Only a lawn
+tile can sit at height 0 (the game removes ordinary grass that reaches it), so nothing else is
+affected. Lawn Grass's `GrowChance` slows every growth stage alike, which is why this is separate.
+
 ## Compatibility
 
 - Stardew Valley 1.6.14+, SMAPI 4.0.0+, single player and multiplayer.
 - Works with any recolour pack, or with vanilla art.
+- `LawnSproutChance` patches `Grass.dayUpdate`. Another mod that also changes how bare lawn regrows
+  may fight it; set `LawnSproutChance` to `1` to switch this part off.
 - Don't run this alongside a Content Patcher pack that replaces the same lawn assets; both would
   patch `aedenthorn.LawnGrass/lawn_<season>` and the results would depend on load order.
 

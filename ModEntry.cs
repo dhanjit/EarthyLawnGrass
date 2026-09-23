@@ -1,4 +1,5 @@
 using System;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -15,6 +16,10 @@ internal sealed class ModConfig
     /// <summary>The tile index in <c>Maps/&lt;season&gt;_outdoorsTileSheet</c> to take the lawn colour from.
     /// 175 is the plain grass the farm map uses; 351 is the darker mown patch by the farmhouse.</summary>
     public int TileIndex { get; set; } = 175;
+
+    /// <summary>The daily chance that a mown lawn tile (height 0) starts growing again. Once it has
+    /// sprouted it grows at the normal rate. 1 turns this off and leaves growth to Lawn Grass alone.</summary>
+    public float LawnSproutChance { get; set; } = 0.01f;
 }
 
 /// <summary>Retextures aedenthorn's Lawn Grass with the grass tile from whichever outdoor tilesheet is
@@ -30,6 +35,8 @@ public class ModEntry : Mod
     public override void Entry(IModHelper helper)
     {
         this.Config = helper.ReadConfig<ModConfig>();
+        SproutPatch.Config = this.Config;
+        new Harmony(this.ModManifest.UniqueID).PatchAll();
         helper.Events.Content.AssetRequested += this.OnAssetRequested;
         helper.Events.Content.AssetsInvalidated += this.OnAssetsInvalidated;
     }
