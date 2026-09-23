@@ -1,7 +1,7 @@
 {
   "Name": "Earthy Lawn Grass",
   "Author": "dhanjit",
-  "Version": "1.1.0",
+  "Version": "1.3.1",
   "Description": "Retextures Lawn Grass with the grass tile from whichever outdoor tilesheet is loaded, so the lawn matches your recolour pack (or vanilla). Ships no art.",
   "UniqueID": "dhanjit.EarthyLawnGrass",
   "EntryDll": "EarthyLawnGrass.dll",
@@ -10,6 +10,10 @@
     {
       "UniqueID": "aedenthorn.LawnGrass",
       "IsRequired": true
+    },
+    {
+      "UniqueID": "spacechase0.GenericModConfigMenu",
+      "IsRequired": false
     }
   ],
   "UpdateKeys": [
